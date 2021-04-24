@@ -1,10 +1,10 @@
-import NodeTest from "./NodeTest";
+import Experiment from "./Experiment";
 
 const App = () => {
   return (
     <div
       style={{
-        backgroundColor: "pink",
+        backgroundColor: "green",
         position: "absolute",
         top: 0,
         bottom: 0,
@@ -13,10 +13,14 @@ const App = () => {
         display: "flex",
       }}
     >
-      <div style={{ flex: 3 }}>
-        <NodeTest />
-      </div>
-      <div style={{ flex: 2, backgroundColor: "blue" }}>TODO: graph</div>
+      <Experiment
+        renderNodeGraph={(nodeGraph: JSX.Element) => (
+          <div style={{ flex: 3, backgroundColor: "pink" }}>{nodeGraph}</div>
+        )}
+        renderGraphPanel={(graphPanel: JSX.Element) => (
+          <div style={{ flex: 2, backgroundColor: "blue" }}>{graphPanel}</div>
+        )}
+      />
     </div>
   );
 };

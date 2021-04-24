@@ -25,8 +25,19 @@ const elements = [
   { id: "e2-3", source: "2", target: "3" },
 ];
 
-const NodeTest = () => {
-  return <ReactFlow elements={elements} />;
+const LogicContainer = ({
+  renderNodeGraph,
+  renderGraphPanel,
+}: {
+  renderNodeGraph: (element: JSX.Element) => JSX.Element;
+  renderGraphPanel: (element: JSX.Element) => JSX.Element;
+}) => {
+  return (
+    <>
+      {renderNodeGraph(<ReactFlow elements={elements} />)}
+      {renderGraphPanel(<>TODO: graph</>)}
+    </>
+  );
 };
 
-export default NodeTest;
+export default LogicContainer;
