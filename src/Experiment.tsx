@@ -28,25 +28,8 @@ const getStaticElements = () => {
 
 const elements = getStaticElements();
 
-const LogicContainer = React.memo(
-  ({
-    renderNodeGraph,
-    renderGraphPanel,
-  }: {
-    // TODO: <Provider /> would be cleaner than render props for
-    // exposing flow state to the graph panel https://reactflow.dev/examples/provider/
-    renderNodeGraph: (element: React.ReactNode) => React.ReactNode;
-    renderGraphPanel: (element: React.ReactNode) => React.ReactNode;
-  }) => {
-    return (
-      <>
-        {renderNodeGraph(
-          <ReactFlow nodeTypes={nodeTypes} elements={elements} />
-        )}
-        {renderGraphPanel(<>TODO: graph</>)}
-      </>
-    );
-  }
-);
+const LogicContainer = React.memo(() => {
+  return <ReactFlow nodeTypes={nodeTypes} elements={elements} />;
+});
 
 export default LogicContainer;

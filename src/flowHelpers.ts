@@ -6,13 +6,22 @@ export enum FlowNodeTypes {
 }
 
 export type NodePosition = { x: number; y: number };
-export type FlowNode<T, U = undefined> = {
+
+// TODO: just reexport from React Flow?
+// we might not be able to since React Flow's
+// doesn't refine `data`'s type based on `type`
+export type FlowNode = {
+  id: string;
+  type: FlowNodeTypes;
+  position: NodePosition;
+};
+export type FlowNodeOf<T, U = undefined> = {
   id: string;
   type: T;
   data: U;
-  position: { x: number; y: number };
+  position: NodePosition;
 };
-export type DieNode = FlowNode<
+export type DieNode = FlowNodeOf<
   FlowNodeTypes.die,
   {
     label: string;
@@ -20,7 +29,7 @@ export type DieNode = FlowNode<
   }
 >;
 
-export type CompareHistogramNode = FlowNode<
+export type CompareHistogramNode = FlowNodeOf<
   FlowNodeTypes.compareHistogram,
   {
     label: string;
@@ -51,14 +60,15 @@ export const compareHistogramNode = (
   data: { label: "Compare Histogram" },
 });
 
-export type Edge = {
+// TODO: just reexport from React Flow?
+export type FlowEdge = {
   id: string;
   source: string;
   target: string;
   animated?: boolean;
 };
 
-export const edge = (source: string, target: string): Edge => ({
+export const edge = (source: string, target: string): FlowEdge => ({
   id: uuid(),
   source,
   target,

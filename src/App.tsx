@@ -1,17 +1,8 @@
-import { useMemo } from "react";
+import { ReactFlowProvider } from "react-flow-renderer";
 import Experiment from "./Experiment";
+import Sidebar from "./Sidebar";
 
 const App = () => {
-  const props = useMemo(() => {
-    return {
-      renderNodeGraph: (nodeGraph: React.ReactNode) => (
-        <div style={{ flex: 3, backgroundColor: "pink" }}>{nodeGraph}</div>
-      ),
-      renderGraphPanel: (graphPanel: React.ReactNode) => (
-        <div style={{ flex: 2, backgroundColor: "blue" }}>{graphPanel}</div>
-      ),
-    };
-  }, []);
   return (
     <div
       style={{
@@ -24,7 +15,14 @@ const App = () => {
         display: "flex",
       }}
     >
-      <Experiment {...props} />
+      <ReactFlowProvider>
+        <div style={{ flex: 3, backgroundColor: "pink" }}>
+          <Experiment />
+        </div>
+        <div style={{ flex: 2, backgroundColor: "blue" }}>
+          <Sidebar />
+        </div>
+      </ReactFlowProvider>
     </div>
   );
 };
