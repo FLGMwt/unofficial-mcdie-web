@@ -11,10 +11,11 @@ export default React.memo(({ data }: { data: DieNode["data"] }) => {
         {data.label} |{" "}
         <strong
           onClick={() => {
-            const value = prompt("How many faces?");
-            if (value) {
-              data.setDieFaceCount(parseInt(value));
-            }
+            const response = prompt("How many faces?");
+            if (!response) return;
+            const value = parseInt(response);
+            if (!value || value < 0) return;
+            data.setDieFaceCount(value);
           }}
         >
           d{data.faceCount}
