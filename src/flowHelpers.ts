@@ -26,6 +26,7 @@ export type DieNode = FlowNodeOf<
   {
     label: string;
     faceCount: number;
+    setDieFaceCount: (faceCount: number) => void;
   }
 >;
 
@@ -50,7 +51,7 @@ export const baseNode = <T extends FlowNodeTypes>(
 
 export const dieNode = (position: NodePosition, faceCount = 6): DieNode => ({
   ...baseNode(FlowNodeTypes.die, position),
-  data: { label: "Die", faceCount },
+  data: { label: "Die", faceCount, setDieFaceCount: (faceCount: number) => {} },
 });
 
 export const compareHistogramNode = (

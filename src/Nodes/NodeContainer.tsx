@@ -2,10 +2,15 @@ const NodeContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       style={{
-        backgroundColor: "darkgray",
-        padding: 20,
-        border: "2px solid gray",
-        borderRadius: 4,
+        padding: 10,
+        borderRadius: 3,
+        width: 150,
+        fontSize: 12,
+        color: "#222",
+        textAlign: "center",
+        borderWidth: 1,
+        borderStyle: "solid",
+        backgroundColor: "#EEEBE7",
       }}
     >
       {children}

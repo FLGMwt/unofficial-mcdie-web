@@ -1,6 +1,11 @@
-import React from "react";
-import ReactFlow from "react-flow-renderer";
-import { dieNode, compareHistogramNode, edge } from "./flowHelpers";
+import React, { useEffect, useState } from "react";
+import ReactFlow, { Controls, FlowElement } from "react-flow-renderer";
+import {
+  dieNode,
+  compareHistogramNode,
+  edge,
+  FlowNodeTypes,
+} from "./flowHelpers";
 import CompareHistogramNode from "./Nodes/CompareHistogramNode";
 import DieNode from "./Nodes/DieNode";
 const nodeTypes = {
@@ -26,10 +31,36 @@ const getStaticElements = () => {
   ];
 };
 
-const elements = getStaticElements();
-
 const FlowGraph = React.memo(() => {
-  return <ReactFlow nodeTypes={nodeTypes} elements={elements} />;
+  const [elements, setElements] = useState([] as FlowElement[]);
+  useEffect(() => {
+    const makeSetDieFaceCount = (id: string) => (faceCount: number) => {
+      setElements((elements) =>
+        elements.map((a) => {
+          if (a.id === id) {
+            return { ...a, data: { ...a.data, faceCount } };
+          }
+          return a;
+        })
+      );
+    };
+
+    setElements(
+      (getStaticElements() as FlowElement[]).map((a) =>
+        a?.type === FlowNodeTypes.die
+          ? {
+              ...a,
+              data: { ...a.data, setDieFaceCount: makeSetDieFaceCount(a.id) },
+            }
+          : a
+      )
+    );
+  }, []);
+  return (
+    <ReactFlow nodeTypes={nodeTypes} elements={elements}>
+      <Controls />
+    </ReactFlow>
+  );
 });
 
 export default FlowGraph;

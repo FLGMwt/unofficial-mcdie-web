@@ -25,24 +25,26 @@ const processOutputNodes = ({
     (node) => node.type === FlowNodeTypes.compareHistogram
   );
   const incomingDiceNodes = getIncomers(compareHistogram!) as DieNode[];
-  const leftDie = incomingDiceNodes[0];
-  const rightDie = incomingDiceNodes[1];
+  const leftDieFaceCount = incomingDiceNodes[0].data.faceCount;
+  const leftBinName = `A: d${leftDieFaceCount}`;
+  const rightDieFaceCount = incomingDiceNodes[1].data.faceCount;
+  const rightBinName = `B: d${rightDieFaceCount}`;
 
-  const compareResults = [];
+  const results = [];
   for (let index = 0; index < 10000; index++) {
-    const left = roll(leftDie.data.faceCount);
-    const right = roll(rightDie.data.faceCount);
+    const left = roll(leftDieFaceCount);
+    const right = roll(rightDieFaceCount);
 
     let compareResult = "tie";
     if (left > right) {
-      compareResult = "left";
+      compareResult = leftBinName;
     }
     if (right > left) {
-      compareResult = "right";
+      compareResult = rightBinName;
     }
-    compareResults.push(compareResult);
+    results.push(compareResult);
   }
-  return compareResults;
+  return { results, bins: [leftBinName, "tie", rightBinName] };
 };
 
 const Sidebar = React.memo(() => {
@@ -50,18 +52,41 @@ const Sidebar = React.memo(() => {
     nodes: nodes as FlowNode[],
     edges: edges as FlowEdge[],
   }));
-  const [results, setResults] = useState<string[] | undefined>(undefined);
+  const [executionResult, setExecutionResult] = useState<
+    { results: string[]; bins: string[] } | undefined
+  >(undefined);
 
   const execute = () => {
-    setResults(processOutputNodes(state));
+    setExecutionResult(processOutputNodes(state));
   };
 
   return (
     <div>
-      <button onClick={execute}>Execute</button>
-      {results && (
+      <div style={{ width: "100%", display: "flex" }}>
+        <button
+          onClick={execute}
+          style={{
+            padding: 10,
+            borderRadius: 3,
+            width: "100%",
+            fontSize: 12,
+            color: "white",
+            margin: 16,
+            backgroundColor: "#4281A4",
+            textAlign: "center",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+        >
+          Execute
+        </button>
+      </div>
+      {executionResult && (
         <div style={{ height: 400 }}>
-          <CompareHistogram data={results} />
+          <CompareHistogram
+            data={executionResult.results}
+            bins={executionResult.bins}
+          />
         </div>
       )}
     </div>

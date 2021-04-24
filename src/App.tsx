@@ -12,13 +12,20 @@ const App = () => {
         width: "100%",
         height: "100%",
         display: "flex",
+        backgroundColor: "#a9dad9",
       }}
     >
       <ReactFlowProvider>
         <div style={{ flex: 3 }}>
           <FlowGraph />
         </div>
-        <div style={{ flex: 2, borderLeft: "1px solid black" }}>
+        <div
+          style={{
+            flex: 2,
+            borderLeft: "1px solid black",
+            backgroundColor: "#D4B483",
+          }}
+        >
           <Sidebar />
         </div>
       </ReactFlowProvider>
