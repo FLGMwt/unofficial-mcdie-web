@@ -11,14 +11,14 @@ I don't have any idea how much time I'll spend on this so keep your expectations
 - [x] Project setup
 - [x] Sample [React Flow](https://reactflow.dev/) UI & layout
 - [x] Implement Die + Die => Compare Histogram in React Flow nodes (static nodes, no editing)
-- [ ] Implement Die + Die => Compare Histogram experiment execution UI thread
+- [x] Implement Die + Die => Compare Histogram experiment execution UI thread
 - [ ] Install and configure [`vx`](https://vx-demo.vercel.app/) w/ sample graph
-- [ ] Implement Die + Die => Compare Histogram experiment execution web worker
 - [ ] Chart Die + Die => Compare Histogram result w/ vx
 - [ ] Make nodes slightly less (visually) hideous
 - [ ] Make Die nodes configurable
 - [ ] Plan out graph routing/resolution work
 - [ ] Plan out any additional editing work
+- [ ] Implement Die + Die => Compare Histogram experiment execution web worker
 - [ ] Draw the rest of the friendly owl
 
 ## Development

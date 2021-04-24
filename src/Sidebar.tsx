@@ -1,8 +1,10 @@
+import React from "react";
 import { useState } from "react";
 import {
   getIncomers as getIncomersGivenElements,
   useStoreState,
 } from "react-flow-renderer";
+import CompareHistogram from "./Charts/CompareHistogram";
 import { DieNode, FlowEdge, FlowNode, FlowNodeTypes } from "./flowHelpers";
 
 const roll = (faceCount: number) => Math.ceil(Math.random() * faceCount);
@@ -19,52 +21,36 @@ const processOutputNodes = ({
   const getIncomers = (node: FlowNode) =>
     getIncomersGivenElements(node, elements);
 
-  const results = [];
-  const compareHistograms = nodes.filter(
+  const compareHistogram = nodes.find(
     (node) => node.type === FlowNodeTypes.compareHistogram
   );
+  const incomingDiceNodes = getIncomers(compareHistogram!) as DieNode[];
+  const leftDie = incomingDiceNodes[0];
+  const rightDie = incomingDiceNodes[1];
 
-  for (const compareHistogram of compareHistograms) {
-    const incomingDiceNodes = getIncomers(compareHistogram) as DieNode[];
-    const leftDie = incomingDiceNodes[0];
-    const rightDie = incomingDiceNodes[1];
+  const compareResults = [];
+  for (let index = 0; index < 10000; index++) {
+    const left = roll(leftDie.data.faceCount);
+    const right = roll(rightDie.data.faceCount);
 
-    let leftCount = 0;
-    let rightCount = 0;
-    let tieCount = 0;
-    for (let index = 0; index < 10000; index++) {
-      const left = roll(leftDie.data.faceCount);
-      const right = roll(leftDie.data.faceCount);
-
-      if (left > right) {
-        leftCount += 1;
-      }
-      if (right > left) {
-        rightCount += 1;
-      }
-      if (right === left) {
-        tieCount += 1;
-      }
+    let compareResult = "tie";
+    if (left > right) {
+      compareResult = "left";
     }
-    results.push({
-      resultType: compareHistogram.type,
-      left: { die: { id: leftDie.id, data: leftDie.data }, count: leftCount },
-      right: {
-        die: { id: rightDie.id, data: rightDie.data },
-        count: rightCount,
-      },
-      tieCount,
-    });
+    if (right > left) {
+      compareResult = "right";
+    }
+    compareResults.push(compareResult);
   }
-  return results;
+  return compareResults;
 };
 
-const Sidebar = () => {
+const Sidebar = React.memo(() => {
   const state = useStoreState(({ nodes, edges }) => ({
     nodes: nodes as FlowNode[],
     edges: edges as FlowEdge[],
   }));
-  const [results, setResults] = useState<object[] | undefined>(undefined);
+  const [results, setResults] = useState<string[] | undefined>(undefined);
 
   const execute = () => {
     setResults(processOutputNodes(state));
@@ -72,11 +58,14 @@ const Sidebar = () => {
 
   return (
     <div>
-      <div>TODO: chart</div>
       <button onClick={execute}>Execute</button>
-      <div>Results: {results ? JSON.stringify(results) : "None"}</div>
+      {results && (
+        <div style={{ height: 400 }}>
+          <CompareHistogram data={results} />
+        </div>
+      )}
     </div>
   );
-};
+});
 
 export default Sidebar;

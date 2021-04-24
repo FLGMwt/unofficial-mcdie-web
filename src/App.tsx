@@ -1,12 +1,11 @@
 import { ReactFlowProvider } from "react-flow-renderer";
-import Experiment from "./Experiment";
+import FlowGraph from "./FlowGraph";
 import Sidebar from "./Sidebar";
 
 const App = () => {
   return (
     <div
       style={{
-        backgroundColor: "green",
         position: "absolute",
         top: 0,
         bottom: 0,
@@ -16,10 +15,10 @@ const App = () => {
       }}
     >
       <ReactFlowProvider>
-        <div style={{ flex: 3, backgroundColor: "pink" }}>
-          <Experiment />
+        <div style={{ flex: 3 }}>
+          <FlowGraph />
         </div>
-        <div style={{ flex: 2, backgroundColor: "blue" }}>
+        <div style={{ flex: 2, borderLeft: "1px solid black" }}>
           <Sidebar />
         </div>
       </ReactFlowProvider>

@@ -28,8 +28,8 @@ const getStaticElements = () => {
 
 const elements = getStaticElements();
 
-const LogicContainer = React.memo(() => {
+const FlowGraph = React.memo(() => {
   return <ReactFlow nodeTypes={nodeTypes} elements={elements} />;
 });
 
-export default LogicContainer;
+export default FlowGraph;
