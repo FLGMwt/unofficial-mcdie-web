@@ -1,25 +1,24 @@
-import logo from "./logo.svg";
-import "./App.css";
+import NodeTest from "./NodeTest";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        backgroundColor: "pink",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        width: "100%",
+        height: "100%",
+        display: "flex",
+      }}
+    >
+      <div style={{ flex: 3 }}>
+        <NodeTest />
+      </div>
+      <div style={{ flex: 2, backgroundColor: "blue" }}>TODO: graph</div>
     </div>
   );
-}
+};
 
 export default App;
