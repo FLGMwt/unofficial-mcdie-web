@@ -1,74 +1,18 @@
+import React from "react";
 import ReactFlow from "react-flow-renderer";
-import uuid from "uuid-random";
-
-enum FlowNodeTypes {
-  die = "die",
-  compareHistogram = "compareHistogram",
-}
-
-type Position = { x: number; y: number };
-type FlowNode<T, U = undefined> = {
-  id: string;
-  type: T;
-  data: U;
-  position: { x: number; y: number };
+import { dieNode, compareHistogramNode, edge } from "./flowHelpers";
+import CompareHistogramNode from "./Nodes/CompareHistogramNode";
+import DieNode from "./Nodes/DieNode";
+const nodeTypes = {
+  die: DieNode,
+  compareHistogram: CompareHistogramNode,
 };
-type DieNode = FlowNode<
-  FlowNodeTypes.die,
-  {
-    label: string;
-    faceCount: number;
-  }
->;
-
-type CompareHistogramNode = FlowNode<
-  FlowNodeTypes.compareHistogram,
-  {
-    label: string;
-  }
->;
-
-const baseNode = <T extends FlowNodeTypes>(
-  type: FlowNodeTypes,
-  position: Position
-) => ({
-  id: uuid(),
-  // without generic + casting, `type` is too open as the enum itself
-  // instead of refined as the specific type
-  type: type as T,
-  position,
-  data: undefined,
-});
-
-const dieNode = (position: Position, faceCount = 6): DieNode => ({
-  ...baseNode(FlowNodeTypes.die, position),
-  data: { label: "Die", faceCount },
-});
-
-const compareHistogramNode = (position: Position): CompareHistogramNode => ({
-  ...baseNode(FlowNodeTypes.compareHistogram, position),
-  data: { label: "Compare Histogram" },
-});
-
-type Edge = {
-  id: string;
-  source: string;
-  target: string;
-  animated?: boolean;
-};
-
-const edge = (source: string, target: string): Edge => ({
-  id: uuid(),
-  source,
-  target,
-  animated: true,
-});
 
 const getStaticElements = () => {
-  const dieNode1 = dieNode({ x: 250, y: 25 });
-  const dieNode2 = dieNode({ x: 100, y: 125 });
+  const dieNode1 = dieNode({ x: 400, y: 200 });
+  const dieNode2 = dieNode({ x: 400, y: 400 });
 
-  const histogramNode = compareHistogramNode({ x: 250, y: 250 });
+  const histogramNode = compareHistogramNode({ x: 600, y: 300 });
 
   const die1ToHistogramEdge = edge(dieNode1.id, histogramNode.id);
   const die2ToHistogramEdge = edge(dieNode2.id, histogramNode.id);
@@ -84,19 +28,25 @@ const getStaticElements = () => {
 
 const elements = getStaticElements();
 
-const LogicContainer = ({
-  renderNodeGraph,
-  renderGraphPanel,
-}: {
-  renderNodeGraph: (element: JSX.Element) => JSX.Element;
-  renderGraphPanel: (element: JSX.Element) => JSX.Element;
-}) => {
-  return (
-    <>
-      {renderNodeGraph(<ReactFlow elements={elements} />)}
-      {renderGraphPanel(<>TODO: graph</>)}
-    </>
-  );
-};
+const LogicContainer = React.memo(
+  ({
+    renderNodeGraph,
+    renderGraphPanel,
+  }: {
+    // TODO: <Provider /> would be cleaner than render props for
+    // exposing flow state to the graph panel https://reactflow.dev/examples/provider/
+    renderNodeGraph: (element: React.ReactNode) => React.ReactNode;
+    renderGraphPanel: (element: React.ReactNode) => React.ReactNode;
+  }) => {
+    return (
+      <>
+        {renderNodeGraph(
+          <ReactFlow nodeTypes={nodeTypes} elements={elements} />
+        )}
+        {renderGraphPanel(<>TODO: graph</>)}
+      </>
+    );
+  }
+);
 
 export default LogicContainer;

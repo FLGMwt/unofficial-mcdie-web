@@ -9,12 +9,13 @@ I don't have any idea how much time I'll spend on this so keep your expectations
 ## Initial Spike Roadmap
 
 - [x] Project setup
-- [ ] Sample [React Flow](https://reactflow.dev/) UI & layout
-- [ ] Implement Die + Die => Compare Histogram in React Flow nodes (static nodes, no editing)
+- [x] Sample [React Flow](https://reactflow.dev/) UI & layout
+- [x] Implement Die + Die => Compare Histogram in React Flow nodes (static nodes, no editing)
 - [ ] Implement Die + Die => Compare Histogram experiment execution UI thread
 - [ ] Implement Die + Die => Compare Histogram experiment execution web worker
 - [ ] Install and configure [`vx`](https://vx-demo.vercel.app/) w/ sample graph
 - [ ] Graph Die + Die => Compare Histogram result w/ vx
+- [ ] Make nodes slightly less hideous
 - [ ] Make Die nodes configurable
 - [ ] Plan out any additional editing work
 - [ ] Draw the rest of the friendly owl
