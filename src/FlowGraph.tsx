@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ReactFlow, { Controls, FlowElement } from "react-flow-renderer";
+import ReactFlow, {
+  Controls,
+  FlowElement,
+  OnLoadParams,
+} from "react-flow-renderer";
 import {
   dieNode,
   compareHistogramNode,
@@ -56,8 +60,15 @@ const FlowGraph = React.memo(() => {
       )
     );
   }, []);
+  if (!elements.length) {
+    return null;
+  }
   return (
-    <ReactFlow nodeTypes={nodeTypes} elements={elements}>
+    <ReactFlow
+      nodeTypes={nodeTypes}
+      elements={elements}
+      onLoad={(instance) => instance.fitView()}
+    >
       <Controls />
     </ReactFlow>
   );
