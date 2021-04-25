@@ -1,29 +1,22 @@
 import React from "react";
 import { useState } from "react";
 import {
+  FlowElement,
   getIncomers as getIncomersGivenElements,
-  useStoreState,
 } from "react-flow-renderer";
 import CompareHistogram from "./Charts/CompareHistogram";
-import { DieNode, FlowEdge, FlowNode, FlowNodeTypes } from "./flowHelpers";
+import { DieNode, FlowNode, FlowNodeTypes } from "./flowHelpers";
 
 const roll = (faceCount: number) => Math.ceil(Math.random() * faceCount);
 
 // TODO: extract to web worker whenever this does enough to matter
-const processOutputNodes = ({
-  nodes,
-  edges,
-}: {
-  nodes: FlowNode[];
-  edges: FlowEdge[];
-}) => {
-  const elements = [...nodes, ...edges];
+const processOutputNodes = (elements: FlowElement[]) => {
   const getIncomers = (node: FlowNode) =>
     getIncomersGivenElements(node, elements);
 
-  const compareHistogram = nodes.find(
-    (node) => node.type === FlowNodeTypes.compareHistogram
-  );
+  const compareHistogram = elements.find(
+    (element) => element.type === FlowNodeTypes.compareHistogram
+  ) as FlowNode;
   const incomingDiceNodes = getIncomers(compareHistogram!) as DieNode[];
   const leftDieFaceCount = incomingDiceNodes[0].data.faceCount;
   const leftBinName = `A: d${leftDieFaceCount}`;
@@ -47,50 +40,48 @@ const processOutputNodes = ({
   return { results, bins: [leftBinName, "tie", rightBinName] };
 };
 
-const Sidebar = React.memo(() => {
-  const state = useStoreState(({ nodes, edges }) => ({
-    nodes: nodes as FlowNode[],
-    edges: edges as FlowEdge[],
-  }));
-  const [executionResult, setExecutionResult] = useState<
-    { results: string[]; bins: string[] } | undefined
-  >(undefined);
+const Sidebar = React.memo(
+  ({ getElements }: { getElements: () => FlowElement[] }) => {
+    const [executionResult, setExecutionResult] = useState<
+      { results: string[]; bins: string[] } | undefined
+    >(undefined);
 
-  const execute = () => {
-    setExecutionResult(processOutputNodes(state));
-  };
+    const execute = () => {
+      setExecutionResult(processOutputNodes(getElements()));
+    };
 
-  return (
-    <div>
-      <div style={{ width: "100%", display: "flex" }}>
-        <button
-          onClick={execute}
-          style={{
-            padding: 10,
-            borderRadius: 3,
-            width: "100%",
-            fontSize: 12,
-            color: "white",
-            margin: 16,
-            backgroundColor: "#4281A4",
-            textAlign: "center",
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-        >
-          Execute
-        </button>
-      </div>
-      {executionResult && (
-        <div style={{ height: 400 }}>
-          <CompareHistogram
-            data={executionResult.results}
-            bins={executionResult.bins}
-          />
+    return (
+      <div>
+        <div style={{ width: "100%", display: "flex" }}>
+          <button
+            onClick={execute}
+            style={{
+              padding: 10,
+              borderRadius: 3,
+              width: "100%",
+              fontSize: 12,
+              color: "white",
+              margin: 16,
+              backgroundColor: "#4281A4",
+              textAlign: "center",
+              borderWidth: 1,
+              borderStyle: "solid",
+            }}
+          >
+            Execute
+          </button>
         </div>
-      )}
-    </div>
-  );
-});
+        {executionResult && (
+          <div style={{ height: 400 }}>
+            <CompareHistogram
+              data={executionResult.results}
+              bins={executionResult.bins}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+);
 
 export default Sidebar;

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactFlow, {
-  Controls,
-  FlowElement,
-  OnLoadParams,
-} from "react-flow-renderer";
+import ReactFlow, { Controls, FlowElement } from "react-flow-renderer";
 import {
   dieNode,
   compareHistogramNode,
@@ -35,43 +31,55 @@ const getStaticElements = () => {
   ];
 };
 
-const FlowGraph = React.memo(() => {
-  const [elements, setElements] = useState([] as FlowElement[]);
-  useEffect(() => {
-    const makeSetDieFaceCount = (id: string) => (faceCount: number) => {
-      setElements((elements) =>
-        elements.map((a) => {
-          if (a.id === id) {
-            return { ...a, data: { ...a.data, faceCount } };
-          }
-          return a;
-        })
-      );
-    };
-
-    setElements(
-      (getStaticElements() as FlowElement[]).map((a) =>
-        a?.type === FlowNodeTypes.die
-          ? {
-              ...a,
-              data: { ...a.data, setDieFaceCount: makeSetDieFaceCount(a.id) },
+const FlowGraph = React.memo(
+  ({
+    setGetElements,
+  }: {
+    setGetElements: React.Dispatch<
+      React.SetStateAction<(() => FlowElement[]) | undefined>
+    >;
+  }) => {
+    const [elements, setElements] = useState([] as FlowElement[]);
+    useEffect(() => {
+      const makeSetDieFaceCount = (id: string) => (faceCount: number) => {
+        setElements((elements) =>
+          elements.map((a) => {
+            if (a.id === id) {
+              return { ...a, data: { ...a.data, faceCount } };
             }
-          : a
-      )
+            return a;
+          })
+        );
+      };
+
+      setElements(
+        (getStaticElements() as FlowElement[]).map((a) =>
+          a?.type === FlowNodeTypes.die
+            ? {
+                ...a,
+                data: { ...a.data, setDieFaceCount: makeSetDieFaceCount(a.id) },
+              }
+            : a
+        )
+      );
+    }, []);
+    if (!elements.length) {
+      return null;
+    }
+    return (
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        elements={elements}
+        onLoad={(instance) => {
+          instance.fitView();
+          console.log({ instance });
+          setGetElements(() => instance.getElements);
+        }}
+      >
+        <Controls />
+      </ReactFlow>
     );
-  }, []);
-  if (!elements.length) {
-    return null;
   }
-  return (
-    <ReactFlow
-      nodeTypes={nodeTypes}
-      elements={elements}
-      onLoad={(instance) => instance.fitView()}
-    >
-      <Controls />
-    </ReactFlow>
-  );
-});
+);
 
 export default FlowGraph;

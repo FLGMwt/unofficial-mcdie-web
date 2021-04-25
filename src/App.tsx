@@ -1,8 +1,10 @@
-import { ReactFlowProvider } from "react-flow-renderer";
+import { useState } from "react";
+import { FlowElement, ReactFlowProvider } from "react-flow-renderer";
 import FlowGraph from "./FlowGraph";
 import Sidebar from "./Sidebar";
 
 const App = () => {
+  const [getElements, setGetElements] = useState<() => FlowElement[]>();
   return (
     <div
       style={{
@@ -17,7 +19,7 @@ const App = () => {
     >
       <ReactFlowProvider>
         <div style={{ flex: 3 }}>
-          <FlowGraph />
+          <FlowGraph setGetElements={setGetElements} />
         </div>
         <div
           style={{
@@ -26,7 +28,7 @@ const App = () => {
             backgroundColor: "#D4B483",
           }}
         >
-          <Sidebar />
+          {getElements && <Sidebar getElements={getElements} />}
         </div>
       </ReactFlowProvider>
     </div>
