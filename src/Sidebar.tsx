@@ -51,34 +51,46 @@ const Sidebar = React.memo(
     };
 
     return (
-      <div>
-        <div style={{ width: "100%", display: "flex" }}>
-          <button
-            onClick={execute}
-            style={{
-              padding: 10,
-              borderRadius: 3,
-              width: "100%",
-              fontSize: 12,
-              color: "white",
-              margin: 16,
-              backgroundColor: "#4281A4",
-              textAlign: "center",
-              borderWidth: 1,
-              borderStyle: "solid",
-            }}
-          >
-            Execute
-          </button>
-        </div>
-        {executionResult && (
-          <div style={{ height: 400 }}>
-            <CompareHistogram
-              data={executionResult.results}
-              bins={executionResult.bins}
-            />
+      <div style={{ display: "flex", height: "100%", flexDirection: "column" }}>
+        <div style={{ flexGrow: 1 }}>
+          <div style={{ width: "100%", display: "flex" }}>
+            <button
+              onClick={execute}
+              style={{
+                padding: 10,
+                borderRadius: 3,
+                width: "100%",
+                fontSize: 12,
+                color: "white",
+                margin: 16,
+                backgroundColor: "#4281A4",
+                textAlign: "center",
+                borderWidth: 1,
+                borderStyle: "solid",
+              }}
+            >
+              Execute
+            </button>
           </div>
-        )}
+          {executionResult && (
+            <div style={{ height: 400 }}>
+              <CompareHistogram
+                data={executionResult.results}
+                bins={executionResult.bins}
+              />
+            </div>
+          )}
+        </div>
+        <div
+          style={{
+            backgroundColor: "lightgray",
+            textAlign: "center",
+            padding: 16,
+          }}
+        >
+          Inspired by{" "}
+          <a href="https://gengelstein.itch.io/mcdie">McDie by gengelstein</a>
+        </div>
       </div>
     );
   }

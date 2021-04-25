@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ReactFlow, { Controls, FlowElement } from "react-flow-renderer";
+import ReactFlow, {
+  Background,
+  BackgroundVariant,
+  Controls,
+  FlowElement,
+} from "react-flow-renderer";
 import {
   dieNode,
   compareHistogramNode,
@@ -76,6 +81,7 @@ const FlowGraph = React.memo(
           setGetElements(() => instance.getElements);
         }}
       >
+        <Background variant={BackgroundVariant.Dots} gap={32} size={1} />
         <Controls />
       </ReactFlow>
     );
